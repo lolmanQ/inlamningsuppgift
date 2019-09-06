@@ -10,6 +10,8 @@ namespace uppgift_1
     {
         static void Main(string[] args)
         {
+            Random random = new Random();
+            int datorTal = random.Next(1, 100);
 
         }
     }
