@@ -11,9 +11,34 @@ namespace uppgift_1
         static void Main(string[] args)
         {
             Random random = new Random();
-            int datorTal = random.Next(1, 100);
-
-
+            int datorNumber = random.Next(1, 100);
+            int attemptCounter = 0;
+			Console.WriteLine("gissa vilket tal datorn har valt det är mellan 1 och 100.");
+            bool guesTrue = false;
+            while (!guesTrue)
+            {
+                string inputString = Console.ReadLine();
+                int inputInt = int.Parse(inputString);
+                attemptCounter++;
+                if(inputInt == datorNumber)
+                {
+					guesTrue = true;
+					Console.WriteLine("Du gissade rätt!");
+					Console.WriteLine("Du gjorde det på: " + attemptCounter + " försök");
+                }
+				else
+				{
+					if(inputInt < datorNumber)
+					{
+						Console.WriteLine("Ditt tal är för litet");
+					}
+					else if(inputInt > datorNumber)
+					{
+						Console.WriteLine("Ditt tal är för stort");
+					}
+					Console.WriteLine("Försök igen");
+				}
+            }
         }
     }
 }
