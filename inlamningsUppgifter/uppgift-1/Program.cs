@@ -13,6 +13,7 @@ namespace uppgift_1
             Random random = new Random();
             int datorTal = random.Next(1, 100);
 
+
         }
     }
 }
