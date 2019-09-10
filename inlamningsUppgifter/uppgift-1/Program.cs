@@ -10,15 +10,19 @@ namespace uppgift_1
     {
         static void Main(string[] args)
         {
-            Random random = new Random();
-            int datorNumber = random.Next(1, 100);
+            Random rnd = new Random();
+            int datorNumber = rnd.Next(1, 100);
             int attemptCounter = 0;
 			Console.WriteLine("gissa vilket tal datorn har valt det är mellan 1 och 100.");
             bool guesTrue = false;
             while (!guesTrue)
             {
                 string inputString = Console.ReadLine();
-                int inputInt = int.Parse(inputString);
+				if(!int.TryParse(inputString, out int inputInt))
+				{
+					inputInt = 0;
+				}
+				
                 attemptCounter++;
                 if(inputInt == datorNumber)
                 {
