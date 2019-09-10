@@ -44,7 +44,7 @@ namespace uppgift_1
 						Console.WriteLine("Försök igen");
 					}
 				}
-			}     
+			}
 			Console.ReadLine();
         }
     }
