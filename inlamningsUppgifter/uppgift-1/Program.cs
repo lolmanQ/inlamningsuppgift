@@ -15,34 +15,36 @@ namespace uppgift_1
             int attemptCounter = 0;
 			Console.WriteLine("gissa vilket tal datorn har valt det är mellan 1 och 100.");
             bool guesTrue = false;
-            while (!guesTrue)
-            {
-                string inputString = Console.ReadLine();
-				if(!int.TryParse(inputString, out int inputInt))
+			while (!guesTrue)
+			{
+				string inputString = Console.ReadLine();
+				if (!int.TryParse(inputString, out int inputInt))
 				{
-					inputInt = 0;
+					Console.WriteLine("invalid input");
 				}
-				
-                attemptCounter++;
-                if(inputInt == datorNumber)
-                {
-					guesTrue = true;
-					Console.WriteLine("Du gissade rätt!");
-					Console.WriteLine("Du gjorde det på: " + attemptCounter + " försök");
-                }
 				else
 				{
-					if(inputInt < datorNumber)
+					attemptCounter++;
+					if (inputInt == datorNumber)
 					{
-						Console.WriteLine("Ditt tal är för litet");
+						guesTrue = true;
+						Console.WriteLine("Du gissade rätt!");
+						Console.WriteLine("Du gjorde det på: " + attemptCounter + " försök");
 					}
-					else if(inputInt > datorNumber)
+					else
 					{
-						Console.WriteLine("Ditt tal är för stort");
+						if (inputInt < datorNumber)
+						{
+							Console.WriteLine("Ditt tal är för litet");
+						}
+						else if (inputInt > datorNumber)
+						{
+							Console.WriteLine("Ditt tal är för stort");
+						}
+						Console.WriteLine("Försök igen");
 					}
-					Console.WriteLine("Försök igen");
 				}
-            }
+			}     
 			Console.ReadLine();
         }
     }
