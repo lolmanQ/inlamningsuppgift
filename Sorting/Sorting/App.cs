@@ -2,26 +2,92 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 namespace Sorting
 {
 	class App
 	{
-		public void Run()
+		long sortor = 100;
+		public void Run(int magic)
 		{
-			int amount = 1000;
-			List<int> list1 = Utilitys.RandomList(amount);
-			List<int> list2 = Utilitys.RandomList(amount);
-			List<int> list3 = Utilitys.RandomList(amount);
+			Stopwatch watch = new Stopwatch();
+			List<int> amounts = new List<int>() { 10, 1000, 10000};
+			if(magic < 10)
+			{
+				sortor = magic;
+				for (int i = 0; i < amounts.Count; i++)
+				{
+					int amount = amounts[i];
+					List<int> list1 = Utilitys.RandomList(amount);
+					List<int> list2 = Utilitys.RandomList(amount);
+					List<int> list3 = Utilitys.RandomList(amount);
+					List<int> list4 = Utilitys.RandomList(amount);
 
-			List<int> bubbelList = BubbelSort(list1);
-			List<int> insertionList = InsertionSort(list2);
-			List<int> mergeList = MergeSort(list3);
+					Console.WriteLine("--------");
+					Console.ForegroundColor = ConsoleColor.Green;
+					Console.WriteLine("Amount: " + amount);
+					Console.ResetColor();
 
-			Utilitys.WriteOutList(bubbelList);
-			Utilitys.WriteOutList(insertionList);
-			Utilitys.WriteOutList(mergeList); //need to remake
-			
+					watch = Stopwatch.StartNew();
+					List<int> bubbelList = BubbelSort(list1);
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "BubbelSort");
+
+					watch = Stopwatch.StartNew();
+					List<int> insertionList = InsertionSort(list2);
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "InsertionSort");
+
+					watch = Stopwatch.StartNew();
+					List<int> mergeList = MergeSort(list3);
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "MergeSort");
+
+					watch = Stopwatch.StartNew();
+					List<int> quickList = Quick_Sort_Start(list4);
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "QuickSort");
+				}
+
+				for (int i = 5; i <= 8; i++) // om i går över 10 kommer typ 100GB utav ram
+				{
+					if (i >= 9)
+					{
+						System.Environment.Exit(0);
+					}
+					else if (sortor>15) i = 9;
+					int bigAmount = Convert.ToInt32(Math.Pow(10, i));
+					Console.WriteLine("--------");
+					Console.WriteLine("Amount: " + bigAmount);
+					//List<int> list5 = Utilitys.RandomList(bigAmount);
+					List<int> list6 = Utilitys.RandomList(bigAmount);
+
+					/*
+					watch = Stopwatch.StartNew();
+					List<int> mergeList2 = MergeSort(list5);
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "MergeSort");
+					*/
+
+					watch = Stopwatch.StartNew();
+					//List<int> quickList2 = Quick_Sort_Start(list6);
+					list6.Sort();
+					watch.Stop();
+					Utilitys.WriteOutTime(watch, "QuickSort");
+				}
+			}
+			else
+			{
+				System.Environment.Exit(99);
+			}
+		}
+
+		public List<int> Quick_Sort_Start(List<int> intList)
+		{
+			int[] toSortAr = intList.ToArray();
+			Quick_Sort(toSortAr, 0, toSortAr.Length - 1);
+			return toSortAr.ToList<int>();
 		}
 
 		public List<int> BubbelSort(List<int> listToSort)
@@ -32,13 +98,13 @@ namespace Sorting
 				isChanged = false;
 				for (int i = 1; i < listToSort.Count; i++)
 				{
-					if(listToSort[i-1] > listToSort[i])
+					if (listToSort[i - 1] > listToSort[i])
 					{
-						Utilitys.Swap(i - 1, i ,ref listToSort);
+						Utilitys.Swap(i - 1, i, ref listToSort);
 						isChanged = true;
 					}
 				}
-			} while (isChanged);
+			} while (isChanged || sortor>20);
 			return listToSort;
 		}
 
@@ -61,6 +127,13 @@ namespace Sorting
 		{
 			if (unsorted.Count <= 1)
 				return unsorted;
+			if (50 < sortor)
+			{
+				Console.Beep(100, 10000);
+				Console.WriteLine("error");
+				System.Environment.Exit(101);
+			}
+				
 
 			List<int> left = new List<int>();
 			List<int> right = new List<int>();
@@ -113,6 +186,57 @@ namespace Sorting
 			}
 			return result;
 		}
+
+		void Quick_Sort(int[] arr, int left, int right)
+		{
+			if (left < right)
+			{
+				int pivot = Partition(arr, left, right);
+
+				if (pivot > 1)
+				{
+					Quick_Sort(arr, left, pivot - 1);
+				}
+				if (pivot + 1 < right)
+				{
+					Quick_Sort(arr, pivot + 1, right);
+				}
+			}
+
+		}
+
+		int Partition(int[] arr, int left, int right)
+		{
+			int pivot = arr[left];
+			while (true)
+			{
+
+				while (arr[left] < pivot)
+				{
+					left++;
+				}
+
+				while (arr[right] > pivot)
+				{
+					right--;
+				}
+
+				if (left < right)
+				{
+					if (arr[left] == arr[right]) return right;
+
+					int temp = arr[left];
+					arr[left] = arr[right];
+					arr[right] = temp;
+
+
+				}
+				else
+				{
+					return right;
+				}
+			}
+		}
 	}
 
 	static class Utilitys
@@ -140,9 +264,13 @@ namespace Sorting
 			List<int> newList = new List<int>();
 			for (int i = 0; i < listLength; i++)
 			{
-				newList.Add(rnd.Next(1000));
+				newList.Add(rnd.Next(listLength));
 			}
 			return newList;
+		}
+		public static void WriteOutTime(Stopwatch stopwatch, string sortName)
+		{
+			Console.WriteLine(sortName + ": " + stopwatch.ElapsedMilliseconds + "ms");
 		}
 	}
 }
