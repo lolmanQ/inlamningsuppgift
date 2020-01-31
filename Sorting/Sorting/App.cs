@@ -12,7 +12,7 @@ namespace Sorting
 		public void Run(int magic)
 		{
 			Stopwatch watch = new Stopwatch();
-			List<int> amounts = new List<int>() { 10, 1000, 10000};
+			List<int> amounts = new List<int>() { 10, 1000, 100000};
 			if(magic < 10)
 			{
 				sortor = magic;
@@ -129,7 +129,7 @@ namespace Sorting
 				return unsorted;
 			if (50 < sortor)
 			{
-				Console.Beep(100, 10000);
+				Console.Beep(1000, 10000);
 				Console.WriteLine("error");
 				System.Environment.Exit(101);
 			}
